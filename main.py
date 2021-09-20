@@ -1,16 +1,31 @@
-# This is a sample Python script.
+# Task 1
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+HomeToStart = [["C1", 1.50], ["C2", 3.00], ["C3", 4.50], ["C4", 6.00], ["C5", 8.00]]
+StartToEnd = [["M1", 5.75], ["M2", 12.50], ["M3", 22.25], ["M4", 34.50], ["M5", 45.00]]
+EndToDest = [["F1", 1.50], ["F2", 3.00], ["F3", 4.50], ["F4", 6.00], ["F5", 8.00]]
+
+PassengerAccounts = []
+Bookings = []
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def generate_unique_id(previous_id):
+    return previous_id + 1
 
 
-# Press the green button in the gutter to run the script.
+def create_account():
+    print('Create New Account')
+    name = input("Enter your name: ")
+    account_number = 1
+    if PassengerAccounts:
+        print(generate_unique_id(PassengerAccounts[len(PassengerAccounts) - 1][0]))
+    PassengerAccounts.append([account_number, name])
+    print(PassengerAccounts)
+
+
+def new_bookings():
+    print("Create New Bookings")
+
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    create_account()
