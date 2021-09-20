@@ -1,10 +1,3 @@
-import os
-
-
-def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
 # Task 1
 
 HomeToStart = [["C1", 1.50], ["C2", 3.00], ["C3", 4.50], ["C4", 6.00], ["C5", 8.00]]
@@ -38,45 +31,57 @@ def pick_price_and_code(code_and_price_list):
         if item[0] == code:
             price = item[1]
     if price == 0.0:
-        print("Invalid code. Try again.")
-        goto(1)
+        print("\nInvalid code. Try again.")
+        return
     return [code, price]
 
 
 def new_bookings():
-    print("Create New Bookings")
+    print("\nCreate New Bookings")
     passenger_account_number = int(input("Enter your account number: "))
     if passenger_account_number not in [item for sublist in PassengerAccounts for item in sublist]:
-        print("Account number not exist!")
-        goto(1)
+        print("Account number not exist!. Try Again..\n")
+        return
 
     booking_number = 1
     if Bookings:
         booking_number = generate_unique_id(Bookings[len(Bookings) - 1][0])
 
-    journey_start_time = int(input("Enter the journey start time in hour: "))
+    try:
+        journey_start_time = int(input("Enter the journey start time in hour Ex(1,2...n) : "))
+        while journey_start_time < 0 or journey_start_time > 24:
+            journey_start_time = int(input("Invalid!! Enter the journey start time in hour between 0 and 24: "))
+    except ValueError:
+        print("\nInvalid!! Input Type. Try  again from Start!\n")
+        return
 
-    print("Home to start list:")
+    print("\nHome to start list:")
     home_to_start = pick_price_and_code(HomeToStart)
+    while home_to_start is None:
+        home_to_start = pick_price_and_code(HomeToStart)
 
-    print("Start to end list:")
+    print("\nStart to end list:")
     start_to_end = pick_price_and_code(StartToEnd)
+    while start_to_end is None:
+        start_to_end = pick_price_and_code(StartToEnd)
 
-    print("End to destination list:")
+    print("\nEnd to destination list:")
     end_to_destination = pick_price_and_code(EndToDest)
+    while end_to_destination is None:
+        end_to_destination = pick_price_and_code(EndToDest)
 
-    print("Trip Confirmation")
+    print("\nTrip Confirmation")
     print("The price for Home to Start is: ", home_to_start[1])
-    print("The price for Start to End is: ", home_to_start[1])
+    print("The price for Start to End is: ", start_to_end[1])
     print("The price for End to Destination is: ", end_to_destination[1])
-    total_price = home_to_start[1] + home_to_start[1] + end_to_destination[1]
+    total_price = home_to_start[1] + start_to_end[1] + end_to_destination[1]
 
     if journey_start_time > 10:
         print("Total trip price with 40% discount: ", round(total_price * 0.6, 2))
     else:
         print("Total trip price: ", total_price)
 
-    confirm_booking = input("Confirm booking.(y/n): ")
+    confirm_booking = input("\nConfirm booking.(y/n): ")
     if confirm_booking in ('y', 'Y'):
         Bookings.append([
             booking_number,
@@ -87,19 +92,31 @@ def new_bookings():
             start_to_end[0],
             start_to_end[1],
             end_to_destination[0],
-            end_to_destination[1]
+            end_to_destination[1],
+            total_price
         ])
-        print("Your trip is booked successfully")
+        print("Your trip is booked successfully\n")
     else:
-        goto(1)
+        print("Your trip is canceled\n")
 
 
 def print_details():
+    print("\nAll Accounts:")
     for item in PassengerAccounts:
-        print(item)
+        print("Account number: " + str(item[0]) + " Account Name: " + str(item[1]))
 
+    print("\nAll Bookings:")
     for item in Bookings:
-        print(item)
+        print("Booking number: ", item[0])
+        print("Passenger account number: ", item[1])
+        print("Journey time: " + str(item[2]) + " hours")
+        print("Home to start code: " + str(item[3]) + " and price: " + str(item[4]))
+        print("Start to end code: " + str(item[5]) + " and price: " + str(item[6]))
+        print("End to destination: " + str(item[7]) + " and price: " + str(item[8]))
+        print("Total price with 40% discount: " if item[2] > 10 else "Total price: ", item[9])
+        print("\n")
+    if Bookings is None:
+        print('\n')
 
 
 def goto(line_number):
@@ -109,6 +126,7 @@ def goto(line_number):
 
 line = 1
 if __name__ == '__main__':
+
     while True:
         if line == 1:
             print("Enter 1 for new account.")
@@ -123,7 +141,6 @@ if __name__ == '__main__':
                 print("\nPlease enter a valid choice:\n")
                 goto(1)
                 continue
-
             if choice == 1:
                 create_account()
             elif choice == 2:
