@@ -8,6 +8,7 @@ PassengerAccounts = []
 Bookings = []
 
 
+# Task 2
 def generate_unique_id(previous_id):
     return previous_id + 1
 
@@ -100,6 +101,7 @@ def new_bookings():
         print("Your trip is canceled\n")
 
 
+# Task 3
 def print_details():
     print("\nAll Accounts:")
     for item in PassengerAccounts:
